@@ -6,6 +6,20 @@ output: html_document
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = FALSE)
+
+
 ```
 
+```{r}
+library(fivethirtyeight)
+library(tidyverse)
+
+data(congress_age)
+
+congress_age%>%
+  mutate(year = format(termstart, "%Y"))%>%filter(party %in% c('R', 'D'))%>%
+  group_by(year, party)%>%
+  summarize(avgAge = mean(age))%>%ggplot(aes(x = year, y = avgAge, group = party, color = party)) + geom_line() + scale_x_continuous(breaks = c(1950, 1960, 1970, 1980, 1990, 2000, 2010)) + labs(tile = "Old") + expand_limits(y = 40)
+
+```
